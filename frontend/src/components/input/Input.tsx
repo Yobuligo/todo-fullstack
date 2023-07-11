@@ -3,10 +3,11 @@ import { IInputProps } from "./IInputProps";
 
 export const Input: React.FC<IInputProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { onEnter, ...inputProps } = props;
 
   return (
     <input
-      {...props}
+      {...inputProps}
       ref={inputRef}
       onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {

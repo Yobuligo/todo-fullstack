@@ -1,4 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { TodoDAO } from "../../api/TodoDAO";
+import { LoadingSpinner } from "../../components/loadingSpinner/LoadingSpinner";
 import { AppContext } from "../../context/AppContext";
 import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
@@ -7,25 +9,29 @@ import { ITodoFrameProps } from "./ITodoFrameProps";
 import styles from "./TodoFrame.module.css";
 
 export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
+  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const context = useContext(AppContext);
 
-  const onAddTodo = (text: string) => {
-    context.todos.onAdd({
-      id: 123,
-      text,
-      createdAt: new Date(),
-      changedAt: new Date(),
-      completed: false,
-    });
+  const onAddTodo = async (text: string) => {
+    setShowLoadingSpinner(true);
+    const todo = await TodoDAO.add({ text, completed: false });
+    context.todos.onAdd(todo);
+    setShowLoadingSpinner(false);
   };
 
-  const onDeleteTodo = (todo: ITodo) => {
-    context.todos.onDelete(todo);
+  const onDeleteTodo = async (todo: ITodo) => {
+    setShowLoadingSpinner(true);
+    const success = await TodoDAO.delete(todo);
+    if (success) {
+      context.todos.onDelete(todo);
+    }
+    setShowLoadingSpinner(false);
   };
 
   return (
     <div className={styles.todoFrame}>
       <TodoAdd onAddTodo={onAddTodo} />
+      {showLoadingSpinner ?? <LoadingSpinner />}
       <TodoList todos={context.todos.dataObjects} onDeleteTodo={onDeleteTodo} />
     </div>
   );
