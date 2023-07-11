@@ -4,6 +4,8 @@ import { IEntity } from "../shared/types/IEntity";
 import { IEntityDetails } from "../shared/types/IEntityDetails";
 
 export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
+  private needsSynchronization = true;
+
   constructor(private readonly model: ModelStatic<Model<T, IEntity>>) {}
 
   add(dataObject: IEntityDetails<T>): Promise<T> {
@@ -39,10 +41,18 @@ export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
   ): Promise<T> {
     return new Promise(async (resolve, reject) => {
       try {
+        await this.synchronize();
         await block(resolve);
       } catch (error) {
         reject(error);
       }
     });
+  }
+
+  private async synchronize() {
+    if (this.needsSynchronization) {
+      await this.model.sync();
+      this.needsSynchronization = false;
+    }
   }
 }
