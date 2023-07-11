@@ -3,7 +3,7 @@ import { IEntity } from "../shared/types/IEntity";
 import { IDataAccessObject } from "../types/IDataAccessObject";
 
 export const useDataAccessObject = <T extends IEntity>(
-  initialDataObject: T[]
+  initialDataObject?: T[]
 ): IDataAccessObject<T> => {
   const [dataObjects, setDataObjects] = useState(initialDataObject ?? []);
 

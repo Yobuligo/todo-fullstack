@@ -1,8 +1,13 @@
 import "./App.css";
+import { AppContextProvider } from "./features/appContextProvider/AppContextProvider";
 import { TodoFrame } from "./features/todoFrame/TodoFrame";
 
 function App() {
-  return <TodoFrame />;
+  return (
+    <AppContextProvider>
+      <TodoFrame />
+    </AppContextProvider>
+  );
 }
 
 export default App;
