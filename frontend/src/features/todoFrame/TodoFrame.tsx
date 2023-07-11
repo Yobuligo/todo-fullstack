@@ -6,37 +6,44 @@ import { useInitialize } from "../../hooks/useInitialize";
 import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
 import { TodoList } from "../todoList/TodoList";
-import { ITodoFrameProps } from "./ITodoFrameProps";
 import styles from "./TodoFrame.module.css";
 
-export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
+export const TodoFrame: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const context = useContext(AppContext);
 
-  useInitialize(async () => {
+  const request = async (block: () => void) => {
     try {
-      const todos = await TodoDAO.findAll();
-      context.todos.setDataObjects(todos);
+      setShowLoadingSpinner(true);
+      await block();
+      setShowLoadingSpinner(false);
     } catch (error) {
       setHasError(true);
     }
+  };
+
+  useInitialize(async () => {
+    request(async () => {
+      const todos = await TodoDAO.findAll();
+      context.todos.setDataObjects(todos);
+    });
   });
 
   const onAddTodo = async (text: string) => {
-    setShowLoadingSpinner(true);
-    const todo = await TodoDAO.add({ text, completed: false });
-    context.todos.onAdd(todo);
-    setShowLoadingSpinner(false);
+    request(async () => {
+      const todo = await TodoDAO.add({ text, completed: false });
+      context.todos.onAdd(todo);
+    });
   };
 
   const onDeleteTodo = async (todo: ITodo) => {
-    setShowLoadingSpinner(true);
-    const success = await TodoDAO.delete(todo);
-    if (success) {
-      context.todos.onDelete(todo);
-    }
-    setShowLoadingSpinner(false);
+    request(async () => {
+      const success = await TodoDAO.delete(todo);
+      if (success) {
+        context.todos.onDelete(todo);
+      }
+    });
   };
 
   return (
