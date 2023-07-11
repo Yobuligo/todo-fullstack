@@ -12,7 +12,7 @@ export const TodoAdd: React.FC<ITodoAddProps> = (props) => {
       return;
     }
 
-    props.onAddNote(text);
+    props.onAddTodo(text);
     setText("");
   };
 
