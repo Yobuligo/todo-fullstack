@@ -3,7 +3,7 @@ import { ITodo } from "../shared/model/ITodo";
 
 class TodoDAODefault extends DataAccessObject<ITodo> {
   constructor() {
-    super("/todo");
+    super("/todos");
   }
 }
 
