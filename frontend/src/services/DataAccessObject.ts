@@ -20,8 +20,12 @@ export abstract class DataAccessObject<T extends IEntity>
   }
 
   delete(dataObject: T): Promise<boolean> {
+    return this.deleteById(dataObject.id);
+  }
+
+  deleteById(id: number): Promise<boolean> {
     return this.createPromise(async (resolve) => {
-      const response = await fetch(`${this.url}/${dataObject.id}`, {
+      const response = await fetch(`${this.url}/${id}`, {
         method: "DELETE",
         mode: "cors",
       });

@@ -14,9 +14,13 @@ export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
   }
 
   delete(dataObject: T): Promise<boolean> {
+    return this.deleteById(dataObject.id);
+  }
+
+  deleteById(id: number): Promise<boolean> {
     return this.createPromise(async (resolve) => {
       const data = await this.model.destroy({
-        where: { id: dataObject.id } as WhereOptions,
+        where: { id: id } as WhereOptions,
       });
       resolve(data === 1);
     });
