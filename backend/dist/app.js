@@ -17,5 +17,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use(new Controller_1.Controller("/todos", new SequelizeRepository_1.SequelizeRepository(Todo_1.Todo)).router);
+app.use((req, res) => {
+    res.status(404).send("<h1>Unknown Request</h1>");
+});
 app.listen(5000);
 //# sourceMappingURL=app.js.map

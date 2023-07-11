@@ -41,10 +41,7 @@ export abstract class DataAccessObject<T extends IEntity>
   }
 
   private get url(): string {
-    for (const prop in process.env) {
-      console.log(process.env[prop]);
-    }
-    return `http://localhost:5000${this.path}`;
+    return `${process.env.REACT_APP_SERVER_URL}${this.path}`;
   }
 
   private createPromise<T>(
