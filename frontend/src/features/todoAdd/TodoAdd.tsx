@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Input } from "../../components/Input";
+
+import { Input } from "../../components/input/Input";
 import { useTranslation } from "../../hooks/useTranslation";
 import { ITodoAddProps } from "./ITodoAddProps";
 

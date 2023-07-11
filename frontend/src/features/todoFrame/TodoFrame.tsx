@@ -4,6 +4,7 @@ import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
 import { TodoList } from "../todoList/TodoList";
 import { ITodoFrameProps } from "./ITodoFrameProps";
+import styles from "./TodoFrame.module.css";
 
 export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
   const context = useContext(AppContext);
@@ -23,9 +24,9 @@ export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
   };
 
   return (
-    <>
+    <div className={styles.todoFrame}>
       <TodoAdd onAddTodo={onAddTodo} />
       <TodoList todos={context.todos.dataObjects} onDeleteTodo={onDeleteTodo} />
-    </>
+    </div>
   );
 };
