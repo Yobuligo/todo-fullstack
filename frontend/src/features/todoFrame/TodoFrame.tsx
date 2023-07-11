@@ -7,7 +7,7 @@ export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
   const todos: ITodo[] = [];
   return (
     <>
-      <TodoAdd onAdd={() => {}} />
+      <TodoAdd onAddNote={() => {}} />
       <TodoList todos={todos} onDeleteTodo={() => {}} />
     </>
   );

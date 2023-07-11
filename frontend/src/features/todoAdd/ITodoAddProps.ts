@@ -1,3 +1,3 @@
 export interface ITodoAddProps {
-  onAdd(text: string): void;
+  onAddNote(text: string): void;
 }
