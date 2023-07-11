@@ -10,12 +10,17 @@ import { ITodoFrameProps } from "./ITodoFrameProps";
 import styles from "./TodoFrame.module.css";
 
 export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
+  const [hasError, setHasError] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const context = useContext(AppContext);
 
   useInitialize(async () => {
-    const todos = await TodoDAO.findAll();
-    context.todos.setDataObjects(todos);
+    try {
+      const todos = await TodoDAO.findAll();
+      context.todos.setDataObjects(todos);
+    } catch (error) {
+      setHasError(true);
+    }
   });
 
   const onAddTodo = async (text: string) => {
@@ -36,8 +41,9 @@ export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
 
   return (
     <div className={styles.todoFrame}>
+      {hasError && <p>Error when loading data</p>}
       <TodoAdd onAddTodo={onAddTodo} />
-      {showLoadingSpinner ?? <LoadingSpinner />}
+      {showLoadingSpinner && <LoadingSpinner />}
       <TodoList todos={context.todos.dataObjects} onDeleteTodo={onDeleteTodo} />
     </div>
   );

@@ -36,20 +36,23 @@ export abstract class DataAccessObject<T extends IEntity>
   findAll(): Promise<T[]> {
     return this.createPromise(async (resolve) => {
       const response = await fetch(this.url);
+      if (!response.ok){
+        console.log(`Error when sending request to '${response.url}'`)
+      }
       resolve(await response.json());
     });
   }
 
   private get url(): string {
-    return `${process.env.REACT_APP_SERVER_URL}${this.path}`;
+    return `http://localhost:5000${this.path}`;
   }
 
   private createPromise<T>(
-    block: (resolve: (value: T | PromiseLike<T>) => void) => void
+    block: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void
   ): Promise<T> {
     return new Promise(async (resolve, reject) => {
       try {
-        await block(resolve);
+        await block(resolve, reject);
       } catch (error) {
         console.log(error);
         reject(error);
