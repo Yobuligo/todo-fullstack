@@ -1,7 +1,8 @@
 import "./App.css";
+import { TodoFrame } from "./features/todoFrame/TodoFrame";
 
 function App() {
-  return <></>;
+  return <TodoFrame />;
 }
 
 export default App;

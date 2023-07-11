@@ -1,6 +1,6 @@
 import { ITodo } from "../../shared/model/ITodo";
+import { IHaveOnDeleteTodo } from "../../types/IHaveOnDeleteTodo";
 
-export interface ITodoProps {
-  onDelete(todo: ITodo): void;
+export interface ITodoProps extends IHaveOnDeleteTodo {
   todo: ITodo;
 }
