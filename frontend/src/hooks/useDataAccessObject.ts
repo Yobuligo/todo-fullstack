@@ -19,5 +19,5 @@ export const useDataAccessObject = <T extends IEntity>(
     });
   }, []);
 
-  return { dataObjects, onAdd, onDelete };
+  return { dataObjects, onAdd, onDelete, setDataObjects };
 };

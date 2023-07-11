@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { TodoDAO } from "../../api/TodoDAO";
 import { LoadingSpinner } from "../../components/loadingSpinner/LoadingSpinner";
 import { AppContext } from "../../context/AppContext";
+import { useInitialize } from "../../hooks/useInitialize";
 import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
 import { TodoList } from "../todoList/TodoList";
@@ -11,6 +12,11 @@ import styles from "./TodoFrame.module.css";
 export const TodoFrame: React.FC<ITodoFrameProps> = (props) => {
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const context = useContext(AppContext);
+
+  useInitialize(async () => {
+    const todos = await TodoDAO.findAll();
+    context.todos.setDataObjects(todos);
+  });
 
   const onAddTodo = async (text: string) => {
     setShowLoadingSpinner(true);
