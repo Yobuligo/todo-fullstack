@@ -48,7 +48,7 @@ export const TodoFrame: React.FC = () => {
 
   return (
     <div className={styles.todoFrame}>
-      {hasError && <p>Error when loading data</p>}
+      {hasError && <p style={{ color: "red" }}>Error when loading data</p>}
       <TodoAdd onAddTodo={onAddTodo} />
       {showLoadingSpinner && <LoadingSpinner />}
       <TodoList todos={context.todos.dataObjects} onDeleteTodo={onDeleteTodo} />
