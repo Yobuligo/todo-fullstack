@@ -5,7 +5,7 @@ const dotenv_1 = require("dotenv");
 const sequelize_1 = require("sequelize");
 (0, dotenv_1.configDotenv)();
 exports.db = new sequelize_1.Sequelize({
-    dialect: "postgres",
+    dialect: process.env.DB_DIALECT,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT),
