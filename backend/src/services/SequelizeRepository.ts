@@ -4,9 +4,16 @@ import { IEntity } from "../shared/types/IEntity";
 import { IEntityDetails } from "../shared/types/IEntityDetails";
 
 export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
+  private _lastVersion = new Date();
   private needsSynchronization = true;
 
   constructor(private readonly model: ModelStatic<Model<T, IEntity>>) {}
+
+  get lastVersion(): Promise<Date> {
+    return this.createPromise((resolve) => {
+      resolve(this._lastVersion);
+    });
+  }
 
   add(dataObject: IEntityDetails<T>): Promise<T> {
     return this.createPromise(async (resolve) => {
