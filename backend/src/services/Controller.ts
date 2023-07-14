@@ -13,6 +13,7 @@ export class Controller<T extends IEntity> {
     this.delete();
     this.get();
     this.post();
+    this.lastVersion()
   }
 
   private delete() {
@@ -39,5 +40,11 @@ export class Controller<T extends IEntity> {
       const data = await this.repository.add(body);
       res.status(201).send(data);
     });
+  }
+
+  private lastVersion(){
+    this.router.get(`${this.path}/lastVersion`, (req, res)=>{
+      res.status(200).send(this.repository.lastVersion)
+    })
   }
 }
