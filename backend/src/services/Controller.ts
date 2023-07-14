@@ -44,6 +44,7 @@ export class Controller<T extends IEntity> {
 
   private lastVersion(){
     this.router.get(`${this.path}/lastVersion`, (req, res)=>{
+      // changed
       res.status(200).send(this.repository.lastVersion)
     })
   }
