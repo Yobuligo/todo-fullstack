@@ -1,11 +1,20 @@
 import { IRepository } from "../shared/api/IRepository";
 import { IEntity } from "../shared/types/IEntity";
 import { IEntityDetails } from "../shared/types/IEntityDetails";
+import { IEnvelope } from "./../../../backend/src/shared/api/IEnvelope";
 
 export abstract class DataAccessObject<T extends IEntity>
   implements IRepository<T>
 {
   constructor(private readonly path: string) {}
+
+  get lastVersion(): Promise<Date> {
+    return this.createPromise(async (resolve) => {
+      const response = await fetch(`${this.url}/lastVersion`);
+      const data = await response.json();
+      resolve(data);
+    });
+  }
 
   add(dataObject: IEntityDetails<T>): Promise<T> {
     return this.createPromise(async (resolve) => {
@@ -33,13 +42,13 @@ export abstract class DataAccessObject<T extends IEntity>
     });
   }
 
-  findAll(): Promise<T[]> {
+  findAll(): Promise<IEnvelope<T[]>> {
     return this.createPromise(async (resolve) => {
       const response = await fetch(this.url);
-      if (!response.ok){
-        console.log(`Error when sending request to '${response.url}'`)
+      if (!response.ok) {
+        console.log(`Error when sending request to '${response.url}'`);
       }
-      resolve(await response.json());
+      resolve((await response.json()).data);
     });
   }
 
@@ -48,7 +57,10 @@ export abstract class DataAccessObject<T extends IEntity>
   }
 
   private createPromise<T>(
-    block: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void
+    block: (
+      resolve: (value: T | PromiseLike<T>) => void,
+      reject: (reason?: any) => void
+    ) => void
   ): Promise<T> {
     return new Promise(async (resolve, reject) => {
       try {

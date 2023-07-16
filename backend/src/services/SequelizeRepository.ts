@@ -1,4 +1,5 @@
 import { Model, ModelStatic, WhereOptions } from "sequelize";
+import { IEnvelope } from "../shared/api/IEnvelope";
 import { IRepository } from "../shared/api/IRepository";
 import { IEntity } from "../shared/types/IEntity";
 import { IEntityDetails } from "../shared/types/IEntityDetails";
@@ -35,11 +36,11 @@ export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
     });
   }
 
-  findAll(): Promise<T[]> {
+  findAll(): Promise<IEnvelope<T[]>> {
     return this.createPromise(async (resolve) => {
       const data = await this.model.findAll();
       const items = data.map((item) => item.dataValues);
-      resolve(items);
+      resolve({ version: this._lastVersion, data: items });
     });
   }
 

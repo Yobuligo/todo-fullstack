@@ -10,10 +10,10 @@ export class Controller<T extends IEntity> {
     private readonly path: string,
     private readonly repository: IRepository<T>
   ) {
+    this.lastVersion();
     this.delete();
     this.get();
     this.post();
-    this.lastVersion()
   }
 
   private delete() {
@@ -42,10 +42,9 @@ export class Controller<T extends IEntity> {
     });
   }
 
-  private lastVersion(){
-    this.router.get(`${this.path}/lastVersion`, (req, res)=>{
-      // changed
-      res.status(200).send(this.repository.lastVersion)
-    })
+  private lastVersion() {
+    this.router.get(`${this.path}/lastVersion`, (req, res) => {
+      res.status(200).send(this.repository.lastVersion);
+    });
   }
 }
