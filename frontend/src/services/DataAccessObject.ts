@@ -6,11 +6,12 @@ import { IEnvelope } from "./../../../backend/src/shared/api/IEnvelope";
 export abstract class DataAccessObject<T extends IEntity>
   implements IRepository<T>
 {
+  private _version = new Date();
   constructor(private readonly path: string) {}
 
-  get lastVersion(): Promise<Date> {
+  get version(): Promise<Date> {
     return this.createPromise(async (resolve) => {
-      const response = await fetch(`${this.url}/lastVersion`);
+      const response = await fetch(`${this.url}/version`);
       const data = await response.json();
       resolve(data);
     });
@@ -48,7 +49,9 @@ export abstract class DataAccessObject<T extends IEntity>
       if (!response.ok) {
         console.log(`Error when sending request to '${response.url}'`);
       }
-      resolve((await response.json()).data);
+      const envelope: IEnvelope<T[]> = await response.json();
+      this._version = envelope.version;
+      resolve(envelope);
     });
   }
 

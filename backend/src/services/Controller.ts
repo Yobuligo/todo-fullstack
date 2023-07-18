@@ -10,7 +10,7 @@ export class Controller<T extends IEntity> {
     private readonly path: string,
     private readonly repository: IRepository<T>
   ) {
-    this.lastVersion();
+    this.version();
     this.delete();
     this.get();
     this.post();
@@ -42,9 +42,9 @@ export class Controller<T extends IEntity> {
     });
   }
 
-  private lastVersion() {
-    this.router.get(`${this.path}/lastVersion`, (req, res) => {
-      res.status(200).send(this.repository.lastVersion);
+  private version() {
+    this.router.get(`${this.path}/version`, (req, res) => {
+      res.status(200).send(this.repository.version);
     });
   }
 }

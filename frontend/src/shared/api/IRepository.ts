@@ -3,7 +3,7 @@ import { IEntityDetails } from "../types/IEntityDetails";
 import { IEnvelope } from "./IEnvelope";
 
 export interface IRepository<T extends IEntity> {
-  lastVersion: Promise<Date>;
+  version: Promise<Date>;
   add(dataObject: IEntityDetails<T>): Promise<T>;
   delete(dataObject: T): Promise<boolean>;
   deleteById(id: number): Promise<boolean>;
