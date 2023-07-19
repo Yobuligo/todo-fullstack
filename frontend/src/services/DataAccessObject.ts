@@ -55,6 +55,13 @@ export abstract class DataAccessObject<T extends IEntity>
     });
   }
 
+  isOutdated(): Promise<boolean> {
+    return this.createPromise(async (resolve) => {
+      const lastVersion = await this.version;
+      resolve(this._version < lastVersion);
+    });
+  }
+
   private get url(): string {
     return `http://localhost:5000${this.path}`;
   }

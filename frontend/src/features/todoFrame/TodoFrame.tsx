@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { TodoDAO } from "../../api/TodoDAO";
 import { LoadingSpinner } from "../../components/loadingSpinner/LoadingSpinner";
 import { AppContext } from "../../context/AppContext";
@@ -23,12 +23,29 @@ export const TodoFrame: React.FC = () => {
     }
   };
 
+  const reload = useCallback(async () => {
+    const envelope = await TodoDAO.findAll();
+    context.todos.setDataObjects(envelope.data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const poll = useCallback(async () => {
+    setTimeout(async () => {
+      const isOutdated = await TodoDAO.isOutdated();
+      if (isOutdated) {
+        reload();
+      }
+      poll();
+    }, 1000);
+  }, [reload]);
+
   useInitialize(async () => {
-    request(async () => {
-      const envelope = await TodoDAO.findAll();
-      context.todos.setDataObjects(envelope.data);
-    });
+    reload();
   });
+
+  useEffect(() => {
+    poll();
+  }, [poll]);
 
   const onAddTodo = async (text: string) => {
     request(async () => {
