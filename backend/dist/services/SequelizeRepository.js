@@ -10,10 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SequelizeRepository = void 0;
+/**
+ * This repository is responsible for providing access to the current configured database by using Sequelize as ORM
+ */
 class SequelizeRepository {
     constructor(model) {
         this.model = model;
+        this._version = new Date();
         this.needsSynchronization = true;
+    }
+    get version() {
+        return this.createPromise((resolve) => {
+            resolve(this._version);
+        });
     }
     add(dataObject) {
         return this.createPromise((resolve) => __awaiter(this, void 0, void 0, function* () {
@@ -36,7 +45,7 @@ class SequelizeRepository {
         return this.createPromise((resolve) => __awaiter(this, void 0, void 0, function* () {
             const data = yield this.model.findAll();
             const items = data.map((item) => item.dataValues);
-            resolve(items);
+            resolve({ version: this._version, data: items });
         }));
     }
     createPromise(block) {

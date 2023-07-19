@@ -25,8 +25,8 @@ export const TodoFrame: React.FC = () => {
 
   useInitialize(async () => {
     request(async () => {
-      const todos = await TodoDAO.findAll();
-      context.todos.setDataObjects(todos);
+      const envelope = await TodoDAO.findAll();
+      context.todos.setDataObjects(envelope.data);
     });
   });
 

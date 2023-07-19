@@ -1,2 +1,2 @@
 import { IEntity } from "./IEntity";
-export type IEntityDetails<T extends IEntity> = Exclude<T, IEntity>;
+export declare type IEntityDetails<T extends IEntity> = Exclude<T, IEntity>;

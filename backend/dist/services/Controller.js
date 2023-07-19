@@ -16,6 +16,7 @@ class Controller {
         this.path = path;
         this.repository = repository;
         this.router = (0, express_1.Router)();
+        this.version();
         this.delete();
         this.get();
         this.post();
@@ -43,6 +44,11 @@ class Controller {
             const data = yield this.repository.add(body);
             res.status(201).send(data);
         }));
+    }
+    version() {
+        this.router.get(`${this.path}/version`, (req, res) => {
+            res.status(200).send(this.repository.version);
+        });
     }
 }
 exports.Controller = Controller;

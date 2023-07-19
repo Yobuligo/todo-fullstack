@@ -8,4 +8,5 @@ export declare class Controller<T extends IEntity> {
     private delete;
     private get;
     private post;
+    private version;
 }
