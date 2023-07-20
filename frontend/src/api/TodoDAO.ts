@@ -1,10 +1,5 @@
 import { DataAccessObject } from "../services/DataAccessObject";
-import { ITodo } from "../shared/model/ITodo";
+import { IDataAccessObject } from "../services/IDataAccessObject";
+import { ITodo, TodoMeta } from "../shared/model/ITodo";
 
-class TodoDAODefault extends DataAccessObject<ITodo> {
-  constructor() {
-    super("/todos");
-  }
-}
-
-export const TodoDAO = new TodoDAODefault();
+export const TodoDAO: IDataAccessObject<ITodo> = new DataAccessObject(TodoMeta);

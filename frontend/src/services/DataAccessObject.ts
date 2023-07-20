@@ -1,13 +1,15 @@
-import { IRepository } from "../shared/api/IRepository";
 import { IEntity } from "../shared/types/IEntity";
 import { IEntityDetails } from "../shared/types/IEntityDetails";
+import { IEntityMeta } from "../shared/types/IEntityMeta";
 import { IEnvelope } from "./../../../backend/src/shared/api/IEnvelope";
+import { IDataAccessObject } from "./IDataAccessObject";
 
-export abstract class DataAccessObject<T extends IEntity>
-  implements IRepository<T>
+export class DataAccessObject<T extends IEntity>
+  implements IDataAccessObject<T>
 {
   private _version = new Date();
-  constructor(private readonly path: string) {}
+
+  constructor(private readonly entityMeta: IEntityMeta) {}
 
   get version(): Promise<Date> {
     return this.createPromise(async (resolve) => {
@@ -63,7 +65,7 @@ export abstract class DataAccessObject<T extends IEntity>
   }
 
   private get url(): string {
-    return `http://localhost:5000${this.path}`;
+    return `http://localhost:5000${this.entityMeta.path}`;
   }
 
   private createPromise<T>(
