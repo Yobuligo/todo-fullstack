@@ -6,4 +6,4 @@ export interface ITodo extends IEntity {
   completed: boolean;
 }
 
-export const TodoMeta: IEntityMeta = { path: "/persons" };
+export const TodoMeta: IEntityMeta = { path: "/todos" };
