@@ -1,0 +1,1 @@
+{"version":3,"file":"pathToTable.js","sourceRoot":"","sources":["../../src/utils/pathToTable.ts"],"names":[],"mappings":";;;AAAO,MAAM,WAAW,GAAG,CAAC,IAAY,EAAU,EAAE;IAClD,IAAI,IAAI,CAAC,UAAU,CAAC,GAAG,CAAC,EAAE;QACxB,OAAO,IAAI,CAAC,SAAS,EAAE,CAAC;KACzB;IACD,OAAO,IAAI,CAAC;AACd,CAAC,CAAC;AALW,QAAA,WAAW,eAKtB"}

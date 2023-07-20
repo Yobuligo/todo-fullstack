@@ -47,7 +47,7 @@ export class DataAccessObject<T extends IEntity>
 
   findAll(): Promise<IEnvelope<T[]>> {
     return this.createPromise(async (resolve) => {
-      const response = await fetch(this.url);
+      const response = await fetch(this.url, { mode: "cors" });
       if (!response.ok) {
         console.log(`Error when sending request to '${response.url}'`);
       }

@@ -1,3 +1,5 @@
+export class Test{}
+
 // namespace Demo123 {
 //   class DAO<T> {
 //     findAll(): Promise<T[]> {

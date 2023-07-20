@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Controller = void 0;
 const express_1 = require("express");
 class Controller {
-    constructor(path, repository) {
-        this.path = path;
+    constructor(entityMeta, repository) {
+        this.entityMeta = entityMeta;
         this.repository = repository;
         this.router = (0, express_1.Router)();
         this.version();
@@ -22,7 +22,7 @@ class Controller {
         this.post();
     }
     delete() {
-        this.router.delete(`${this.path}/:id`, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.router.delete(`${this.entityMeta.path}/:id`, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = yield this.repository.deleteById(parseInt(req.params.id));
             if (data) {
                 res.status(200).send(true);
@@ -33,20 +33,20 @@ class Controller {
         }));
     }
     get() {
-        this.router.get(this.path, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.router.get(this.entityMeta.path, (_, res) => __awaiter(this, void 0, void 0, function* () {
             const data = yield this.repository.findAll();
             res.status(200).send(data);
         }));
     }
     post() {
-        this.router.post(this.path, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.router.post(this.entityMeta.path, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const body = Object.assign({}, req.body);
             const data = yield this.repository.add(body);
             res.status(201).send(data);
         }));
     }
     version() {
-        this.router.get(`${this.path}/version`, (req, res) => {
+        this.router.get(`${this.entityMeta.path}/version`, (_, res) => {
             res.status(200).send(this.repository.version);
         });
     }
