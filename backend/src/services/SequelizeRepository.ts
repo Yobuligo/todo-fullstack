@@ -21,7 +21,7 @@ export class SequelizeRepository<T extends IEntity> implements IRepository<T> {
 
   add(dataObject: IEntityDetails<T>): Promise<T> {
     return this.createPromise(async (resolve) => {
-      const data = await this.model.create(dataObject);
+      const data = await this.model.create(dataObject as T);
       resolve(data.dataValues);
     });
   }
