@@ -7,6 +7,8 @@ import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
 import { TodoList } from "../todoList/TodoList";
 import styles from "./TodoFrame.module.css";
+import { Poll } from "../../api/Poll";
+import { IEnvelope } from "../../../../backend/src/shared/api/IEnvelope";
 
 export const TodoFrame: React.FC = () => {
   const [hasError, setHasError] = useState(false);
@@ -45,6 +47,9 @@ export const TodoFrame: React.FC = () => {
 
   useEffect(() => {
     poll();
+    new Poll().onPoll<IEnvelope<ITodo[]>>((data) => {
+      context.todos.setDataObjects(data.data);
+    });
   }, [poll]);
 
   const onAddTodo = async (text: string) => {
