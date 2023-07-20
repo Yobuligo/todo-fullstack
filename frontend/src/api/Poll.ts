@@ -1,24 +1,36 @@
-import { ITodo } from "../shared/model/ITodo";
-import { IPoll } from "./IPoll";
-import { ShortPoll } from "./ShortPoll";
+// namespace Demo123 {
+//   class DAO<T> {
+//     findAll(): Promise<T[]> {
+//       throw new Error();
+//     }
+//   }
 
-export class Poll implements IPoll {
-  private strategy = new ShortPoll();
+//   interface IHavePath<T extends string>{
+//     path: T
+//   }
 
-  onPoll<T>(onChange: (data: T) => void): void {
-    throw new Error("Method not implemented.");
-  }
-}
+//   interface IPerson extends IHavePath<"/persons">{
+//     firstname: string;
+//     lastname: string;
+//   }
 
-class Request<T> {
-  onPoll(onChange: (data: T) => void): void {}
+//   class PersonDAODefault extends DAO<IPerson> {}
+//   const PersonDAO = new PersonDAODefault();
 
-  send(): Promise<T> {
-    throw new Error();
-  }
-}
+//   class Request<T> {
+//     constructor(private readonly request: () => Promise<T>) {}
 
-new Request<ITodo[]>().onPoll((data) => {
-    
-});
-new Request<ITodo[]>().send();
+//     onPoll(onChange: (data: T) => void, config?: any): void {}
+
+//     send(): Promise<T> {
+//       throw new Error();
+//     }
+//   }
+
+//   const result = new Request(PersonDAO.findAll).send();
+
+//   new Request(PersonDAO.findAll).onPoll((data) => {}, {
+//     strategy: PollType.SHORT,
+//     interval: 1000,
+//   });
+// }
