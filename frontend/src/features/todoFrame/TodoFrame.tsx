@@ -38,6 +38,14 @@ class Poll<TData, TDataAccessObject extends IDataAccessObject<any>> {
   }
 }
 
+const onPoll = <TData, TDataAccessObject extends IDataAccessObject<any>>(
+  dao: TDataAccessObject,
+  daoRequest: (dao: TDataAccessObject) => Promise<TData>,
+  handler: (data: TData) => void
+): void => {
+  new Poll(dao, daoRequest, handler).onPoll();
+};
+
 export const TodoFrame: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
@@ -54,14 +62,13 @@ export const TodoFrame: React.FC = () => {
   };
 
   useEffect(() => {
-    new Poll(
+    onPoll(
       TodoDAO,
-      TodoDAO.findAll,
-      // (dao) => dao.findAll(),
+      (dao) => dao.findAll(),
       (envelope) => {
         context.todos.setDataObjects(envelope.data);
       }
-    ).onPoll();
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -114,4 +121,3 @@ export const TodoFrame: React.FC = () => {
     </div>
   );
 };
-
