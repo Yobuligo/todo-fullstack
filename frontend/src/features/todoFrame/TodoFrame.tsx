@@ -1,12 +1,42 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TodoDAO } from "../../api/TodoDAO";
 import { LoadingSpinner } from "../../components/loadingSpinner/LoadingSpinner";
 import { AppContext } from "../../context/AppContext";
-import { useInitialize } from "../../hooks/useInitialize";
+import { IDataAccessObject } from "../../services/IDataAccessObject";
 import { ITodo } from "../../shared/model/ITodo";
 import { TodoAdd } from "../todoAdd/TodoAdd";
 import { TodoList } from "../todoList/TodoList";
 import styles from "./TodoFrame.module.css";
+
+class Poll<TData, TDataAccessObject extends IDataAccessObject<any>> {
+  private needsInit = true;
+
+  constructor(
+    private readonly dao: TDataAccessObject,
+    private readonly daoRequest: (dao: TDataAccessObject) => Promise<TData>,
+    private readonly handler: (data: TData) => void
+  ) {}
+
+  onPoll() {
+    if (this.needsInit) {
+      this.reload();
+      this.needsInit = false;
+    }
+
+    setTimeout(async () => {
+      const isOutdated = await this.dao.isOutdated();
+      if (isOutdated) {
+        this.reload();
+      }
+      this.onPoll();
+    }, 1000);
+  }
+
+  async reload() {
+    const data = await this.daoRequest(this.dao);
+    this.handler(data);
+  }
+}
 
 export const TodoFrame: React.FC = () => {
   const [hasError, setHasError] = useState(false);
@@ -23,29 +53,41 @@ export const TodoFrame: React.FC = () => {
     }
   };
 
-  const reload = useCallback(async () => {
-    const envelope = await TodoDAO.findAll();
-    context.todos.setDataObjects(envelope.data);
+  useEffect(() => {
+    new Poll(
+      TodoDAO,
+      TodoDAO.findAll,
+      // (dao) => dao.findAll(),
+      (envelope) => {
+        context.todos.setDataObjects(envelope.data);
+      }
+    ).onPoll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const poll = useCallback(async () => {
-    setTimeout(async () => {
-      const isOutdated = await TodoDAO.isOutdated();
-      if (isOutdated) {
-        reload();
-      }
-      poll();
-    }, 1000);
-  }, [reload]);
+  // const reload = useCallback(async () => {
+  //   const envelope = await TodoDAO.findAll();
+  //   context.todos.setDataObjects(envelope.data);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useInitialize(async () => {
-    reload();
-  });
+  // const poll = useCallback(async () => {
+  //   setTimeout(async () => {
+  //     const isOutdated = await TodoDAO.isOutdated();
+  //     if (isOutdated) {
+  //       reload();
+  //     }
+  //     poll();
+  //   }, 1000);
+  // }, [reload]);
 
-  useEffect(() => {
-    poll();
-  }, [poll]);
+  // useInitialize(async () => {
+  //   reload();
+  // });
+
+  // useEffect(() => {
+  //   poll();
+  // }, [poll]);
 
   const onAddTodo = async (text: string) => {
     request(async () => {
@@ -72,3 +114,4 @@ export const TodoFrame: React.FC = () => {
     </div>
   );
 };
+
